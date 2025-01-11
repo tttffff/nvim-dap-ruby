@@ -55,11 +55,37 @@ Call `:lua require('dap').continue()` to start debugging.
   - [x] Start debugger with current opened spec file (`bundle exec rspec /path/to/file_spec.rb`)
   - [x] Start debugger with `bundle exec rspec ./spec`
 - [x] Rails integration
+- [x] Connect running rdbg
 
 ### Not Supported Yet
 
 - [ ] Rake test
-- [ ] Connect running rdbg
+
+### Rails
+
+Ensure that the debug gem is included in your project.
+
+```sh
+bundle add debug
+```
+
+Then run rails with debugging turned on e.g. with environment variables.
+
+```sh
+RUBY_DEBUG_OPEN=true RUBY_DEBUG_HOST=127.0.0.1 RUBY_DEBUG_PORT=38698 bin/rails server
+RUBY_DEBUG_OPEN=true RUBY_DEBUG_HOST=127.0.0.1 RUBY_DEBUG_PORT=38698 bin/dev # If using esbuild
+```
+
+You need to see `DEBUGGER: Debugger can attach via TCP/IP (127.0.0.1:38698)` somewhere in the output.
+Open nvim in your project's directory, and open a ruby file into a buffer.
+Start the debugger e.g. `:DapContinue` and select the option to `attach existing (port 38698)`.
+Now set breakpoints and make the app hit one of those e.g. by navigating to the page you are working on in a web browser.
+
+#### Extra options
+
+Now that you have confirmed the above works, you can also start your rails server and run the debugger directly from nvim.
+Start the debugger with one of the following configurations: `run rails` for `bin/rails s` or `bin/dev` for `bin/dev`.
+It will automatically set the debugger environment variables, run the command, and attach to the session.
 
 ## :clap: Acknowledgement
 
